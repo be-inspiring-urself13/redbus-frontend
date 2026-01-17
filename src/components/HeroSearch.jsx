@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import bannerDesktop from "../assets/HomeBanner.webp";
 import bannerMobile from "../assets/HomeBanner.webp";
-import womenImg from "../assets/female.jpeg";
+import womenImg from "../assets/female.svg";
 import WomenModel from "./Womenmodel";
 import img1 from "../assets/img1.jpeg";
 import img2 from "../assets/img2.jpeg";
