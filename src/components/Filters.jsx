@@ -1,14 +1,17 @@
 //frontend/src/components/Filters.jsx
 export default function Filters({ onChange }) {
-  const update = (key, value) => {
-    onChange(prev => ({ ...prev, [key]: value }));
+ const update = (key, value) => {
+    onChange(prev => ({
+      ...prev,
+      [key]: prev[key] === value ? "" : value
+    }));
   };
 
   return (
     <div className="space-y-4">
       {/* BUS TYPE */}
       <div>
-        <h4 className="font-bold">Bus Type</h4>
+        <h4 className="font-bold mb-1">Bus Type</h4>
         <label>
           <input type="checkbox" onChange={()=>update("type","AC")} /> AC
         </label><br/>
@@ -19,7 +22,7 @@ export default function Filters({ onChange }) {
 
       {/* CATEGORY */}
       <div>
-        <h4 className="font-bold">Category</h4>
+        <h4 className="font-bold mb-1">Category</h4>
         <label>
           <input type="checkbox" onChange={()=>update("category","Seater")} /> Seater
         </label><br/>
@@ -30,7 +33,7 @@ export default function Filters({ onChange }) {
 
       {/* DEPARTURE */}
       <div>
-        <h4 className="font-bold">Departure</h4>
+        <h4 className="font-bold mb-1">Departure</h4>
         {["Morning","Mid Morning","Afternoon","Night"].map(t => (
           <label key={t} className="block">
             <input

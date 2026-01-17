@@ -5,7 +5,7 @@ import Filters from "../components/Filters";
 import BusCard from "../components/BusCard";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import Loader from "../components/Loader";
 import bg from "../assets/bg.jpeg";
 import noBus from "../assets/nobus.png";
 
@@ -54,13 +54,7 @@ export default function BusList() {
   }, [from, to]);
 
   // ⏳ Loading
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        Loading buses...
-      </div>
-    );
-  }
+
 
   // 🔍 Filters
   const filteredBuses = buses.filter(bus => {
@@ -81,16 +75,25 @@ export default function BusList() {
       className="min-h-screen bg-cover bg-center pt-10 pb-5 px-3 sm:px-6 mb-"
       style={{ backgroundImage: `url(${bg})` }}
     >
+
+      {loading && <Loader />}
+
       <div className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto">
-        {/* LEFT FILTER */}
-        <aside className="w-full lg:w-72 bg-white/90 rounded-xl p-4">
-          <h2 className="font-bold text-lg mb-4">Filters</h2>
-          <Filters onChange={setFilters} />
-        </aside>
+
+        {buses.length > 0 && (
+          <>
+            {/* LEFT FILTER */}
+            < aside className="w-full lg:w-72 bg-white/90 rounded-xl p-4 h-fit">
+              <h2 className="font-bold text-lg mb-4">Filters</h2>
+              <Filters onChange={setFilters} />
+            </aside>
+          </>
+        )};
 
         {/* RIGHT CONTENT */}
         <section className="flex-1">
-          {filteredBuses.length === 0 ? (
+
+          {!loading && filteredBuses.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-white h-[60vh] text-center">
               <img src={noBus} alt="No buses" className="sm:w-72 w-52 mb-6" />
               <h2 className="text-xl sm:text-2xl font-semibold">
@@ -113,6 +116,6 @@ export default function BusList() {
           )}
         </section>
       </div>
-    </div>
+    </div >
   );
 }

@@ -7,7 +7,7 @@ import grab from "../assets/ad3.jpeg"
 
 export default function AppBanner() {
     return (
-        <section className="max-w-7xl md:mx-44 mx-auto  px-4">
+        <section className="max-w-7xl lg:mx-44 mx-auto px-4">
             <div
                 className="relative rounded-2xl overflow-hidden min-h-[180px] md:min-h-[340px] mb-10"
                 style={{

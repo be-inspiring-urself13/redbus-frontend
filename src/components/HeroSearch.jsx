@@ -83,7 +83,7 @@ export default function HeroSearch() {
       {/* BANNER */}
       <img
         src={isMobile ? bannerMobile : bannerDesktop}
-        className="w-full h-[40vh] object-cover"
+        className="w-full h-[35vh] md:h-[45vh] object-cover object-right md:object-center"
         alt="banner"
       />
 
@@ -108,7 +108,7 @@ export default function HeroSearch() {
         <div className="bg-white rounded-2xl shadow-2xl max-w-7xl mx-auto p-4">
 
           {/* SINGLE LINE INPUT ROW */}
-          <div className="grid md:grid-cols-6 gap-3 items-center">
+          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-3 items-center">
 
             {/* FROM */}
             <select
@@ -149,11 +149,11 @@ export default function HeroSearch() {
 
             {/* TOMORROW */}
             <button
-              onClick={() => {
-                const t = new Date();
-                t.setDate(t.getDate() + 1);
-                setDate(t.toISOString().split("T")[0]);
-              }}
+              // onClick={() => {
+              //   const t = new Date();
+              //   t.setDate(t.getDate() + 1);
+              //   setDate(t.toISOString().split("T")[0]);
+              // }}
               className="px-4 py-2 rounded-full bg-red-100 text-red-600"
             >
               Tomorrow
@@ -189,7 +189,7 @@ export default function HeroSearch() {
         </div>
 
         {/* SEARCH BUTTON (OUTSIDE CARD) */}
-        <div className=" max-w-xl mx-auto mt-2" >
+        <div className="w-[300px] mx-auto mt-2" >
           <button
             onClick={searchBuses}
             className="w-full bg-red-600 text-white py-4 rounded-full text-lg font-semibold"
