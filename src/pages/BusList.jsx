@@ -85,10 +85,12 @@ export default function BusList() {
             {/* LEFT FILTER */}
             < aside className="w-full lg:w-72 bg-white/90 rounded-xl p-4 h-fit">
               <h2 className="font-bold text-lg mb-4">Filters</h2>
-              <Filters onChange={setFilters} />
+              <Filters filters={filters} onChange={setFilters} />
             </aside>
           </>
-        )};
+        )}
+
+        <div></div>
 
         {/* RIGHT CONTENT */}
         <section className="flex-1">

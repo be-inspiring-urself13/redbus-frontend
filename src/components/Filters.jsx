@@ -1,6 +1,6 @@
 //frontend/src/components/Filters.jsx
-export default function Filters({ onChange }) {
- const update = (key, value) => {
+export default function Filters({ filters = {}, onChange }) {
+  const update = (key, value) => {
     onChange(prev => ({
       ...prev,
       [key]: prev[key] === value ? "" : value
@@ -13,10 +13,10 @@ export default function Filters({ onChange }) {
       <div>
         <h4 className="font-bold mb-1">Bus Type</h4>
         <label>
-          <input type="checkbox" onChange={()=>update("type","AC")} /> AC
-        </label><br/>
+          <input type="checkbox" className="cursor-pointer" onChange={() => update("type", "AC")} /> AC
+        </label><br />
         <label>
-          <input type="checkbox" onChange={()=>update("type","Non AC")} /> Non AC
+          <input type="checkbox" className="cursor-pointer" onChange={() => update("type", "Non AC")} /> Non AC
         </label>
       </div>
 
@@ -24,23 +24,28 @@ export default function Filters({ onChange }) {
       <div>
         <h4 className="font-bold mb-1">Category</h4>
         <label>
-          <input type="checkbox" onChange={()=>update("category","Seater")} /> Seater
-        </label><br/>
+          <input type="checkbox" className="cursor-pointer" onChange={() => update("category", "Seater")} /> Seater
+        </label><br />
         <label>
-          <input type="checkbox" onChange={()=>update("category","Sleeper")} /> Sleeper
+          <input type="checkbox" className="cursor-pointer" onChange={() => update("category", "Sleeper")} /> Sleeper
         </label>
       </div>
 
       {/* DEPARTURE */}
       <div>
         <h4 className="font-bold mb-1">Departure</h4>
-        {["Morning","Mid Morning","Afternoon","Night"].map(t => (
-          <label key={t} className="block">
+
+        {["Morning", "Mid Morning", "Afternoon", "Evening", "Night"].map(t => (
+          <label key={t} className="flex items-center gap-2">
             <input
               type="radio"
+              className="cursor-pointer"
               name="departure"
-              onChange={()=>update("departure",t)}
-            /> {t}
+              value={t.toLowerCase()}
+              checked={filters.departure === t.toLowerCase()}
+              onChange={() => update("departure", t.toLowerCase())}
+            />
+            {t}
           </label>
         ))}
       </div>

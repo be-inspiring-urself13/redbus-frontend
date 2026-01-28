@@ -1,7 +1,7 @@
 //frontend/src/pages/Bookings.jsx
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import Loader from "../components/Loader";
 import book from "../assets/tickets.jpg";
 import bg from "../assets/bg.jpeg";
@@ -20,7 +20,7 @@ export default function Bookings() {
       })
       .catch(err => {
         console.error(err);
-        toast.error("Failed to load bookings");
+        // toast.error("Failed to load bookings");
         setLoading(false);
       });
   }, []);
@@ -28,7 +28,7 @@ export default function Bookings() {
   // ⏳ LOADING STATE
   if (loading) {
     return <Loader />
-     
+
   }
 
   // ❌ NO BOOKINGS

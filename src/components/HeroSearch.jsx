@@ -1,4 +1,3 @@
-//frontend/src/components/HeroSearch.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import bannerDesktop from "../assets/HomeBanner.webp";
@@ -9,6 +8,7 @@ import img1 from "../assets/img1.jpeg";
 import img2 from "../assets/img2.jpeg";
 import img3 from "../assets/img3.jpeg";
 import img4 from "../assets/img4.jpeg";
+import { Search } from "lucide-react";
 
 const CITIES = [
   "Chennai",
@@ -23,12 +23,16 @@ const CITIES = [
 export default function HeroSearch() {
   const navigate = useNavigate();
 
+  // ✅ today default date
+  const today = new Date().toISOString().split("T")[0];
+
   const [from, setFrom] = useState("Chennai");
   const [to, setTo] = useState("Ahmedabad");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(today);
   const [womenOnly, setWomenOnly] = useState(false);
-
   const [toast, setToast] = useState("");
+  const [showWomenModal, setShowWomenModal] = useState(false);
+
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   // responsive detect
@@ -41,8 +45,8 @@ export default function HeroSearch() {
   // toast auto hide
   useEffect(() => {
     if (toast) {
-      const timer = setTimeout(() => setToast(""), 2500);
-      return () => clearTimeout(timer);
+      const t = setTimeout(() => setToast(""), 2500);
+      return () => clearTimeout(t);
     }
   }, [toast]);
 
@@ -55,153 +59,201 @@ export default function HeroSearch() {
     );
   };
 
- const searchBuses = () => {
-  if (!date) {
-    setToast("Please select travel date");
-    return;
-  }
+  const swapCities = () => {
+    setFrom(to);
+    setTo(from);
+  };
 
-  navigate(
-    `/buses?from=${from}&to=${to}&date=${date}`,
-    {
+  const searchBuses = () => {
+    navigate(`/buses?from=${from}&to=${to}&date=${date}`, {
       state: {
         from,
         to,
-        travelDate: date
-      }
-    }
-  );
-};
-
-  const [showWomenModal, setShowWomenModal] = useState(false);
+        travelDate: date,
+      },
+    });
+  };
 
   const womenImages = [img1, img2, img3, img4];
 
   return (
     <div className="relative">
 
-      {/* BANNER */}
+      {/* ================= BANNER ================= */}
       <img
         src={isMobile ? bannerMobile : bannerDesktop}
-        className="w-full h-[35vh] md:h-[45vh] object-cover object-right md:object-center"
+        className="w-full h-[35vh] md:h-[45vh] object-cover"
         alt="banner"
       />
 
-      {/* BANNER TEXT */}
+      {/* ================= BANNER TEXT ================= */}
       <div className="absolute inset-0 flex items-center bg-gradient-to-tr from-black/70 via-black/20 to-transparent">
-        <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 px-6">
-
-          {/* LEFT TEXT */}
-          <div className="text-white relative">
-            <p className="mb-2 text-2xl font-bold">
-              Welcome to RedBus Clone
-            </p>
-            <h1 className="mb-12 text-2xl md:text-4xl font-bold leading-tight">
-              India’s No.1 online<br />bus ticket booking site
-            </h1>
-          </div>
+        <div className="max-w-6xl mb-7 mx-auto w-full px-6 text-white">
+          <p className="mb-2 text-2xl font-bold">Welcome to RedBus Clone</p>
+          <h1 className="text-2xl md:text-4xl font-bold leading-tight">
+            India’s No.1 online<br />bus ticket booking site
+          </h1>
         </div>
       </div>
 
-      {/* SEARCH AREA */}
+      {/* ================= SEARCH AREA ================= */}
       <div className="absolute inset-x-0 top-[75%] px-4">
         <div className="bg-white rounded-2xl shadow-2xl max-w-7xl mx-auto p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-          {/* SINGLE LINE INPUT ROW */}
-          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-3 items-center">
+            {/* ===== FROM & TO (MOBILE) ===== */}
+            <div className="flex flex-col gap-3 md:hidden">
 
-            {/* FROM */}
-            <select
-              value={from}
-              onChange={(e) => setFrom(e.target.value)}
-              className="border rounded-lg p-3"
-            >
-              {CITIES.map(city => (
-                <option key={city}>{city}</option>
-              ))}
-            </select>
+              <div className="flex items-center bg-gray-50 border rounded-xl px-4 py-3">
+                <div className="flex flex-col flex-1">
+                  <span className="text-xs text-gray-500">From</span>
+                  <select
+                    value={from}
+                    onChange={(e) => setFrom(e.target.value)}
+                    className="bg-transparent font-semibold outline-none cursor-pointer"
+                  >
+                    {CITIES.map(c => (
+                      <option key={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-            {/* TO */}
-            <select
-              value={to}
-              onChange={(e) => setTo(e.target.value)}
-              className="border rounded-lg p-3"
-            >
-              {CITIES.map(city => (
-                <option key={city}>{city}</option>
-              ))}
-            </select>
-
-            {/* DATE */}
-            <input
-              type="date"
-              className="border rounded-lg p-3"
-              onChange={(e) => setDate(e.target.value)}
-            />
-
-            {/* TODAY (DISABLED) */}
-            <button
-              disabled
-              className="px-4 py-2 rounded-full bg-gray-200 text-gray-500 cursor-not-allowed"
-            >
-              Today
-            </button>
-
-            {/* TOMORROW */}
-            <button
-              // onClick={() => {
-              //   const t = new Date();
-              //   t.setDate(t.getDate() + 1);
-              //   setDate(t.toISOString().split("T")[0]);
-              // }}
-              className="px-4 py-2 rounded-full bg-red-100 text-red-600"
-            >
-              Tomorrow
-            </button>
-
-            {/* WOMEN TOGGLE */}
-            <div className="flex items-center gap-3 border rounded-lg p-1">
-              <img src={womenImg} className="w-10 h-10" />
-
-              <div>
-                <p className="text-sm font-semibold">Booking for women</p>
-                <button
-                  onClick={() => setShowWomenModal(true)}
-                  className=" text-blue-600 underline"
-                >
-                  Know more
-                </button>
-
-                <button
-                onClick={toggleWomen}
-                className={`w-11 h-6 mt-2 ml-2 rounded-full  ${womenOnly ? "bg-red-600" : "bg-gray-300"
-                  } relative`}
+              <button
+                onClick={swapCities}
+                className="absolute right-16  top-16 z-20 bg-red-500 text-white shadow cursor-pointer rounded-full w-9 h-9"
               >
-                <span
-                  className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition ${womenOnly ? "right-0.5" : "left-0.5"
-                    }`}
-                />
+                ↕
               </button>
+
+              <div className="relative flex items-center bg-gray-50 border rounded-xl px-4 py-3">
+                <div className="flex flex-col flex-1">
+                  <span className="text-xs text-gray-500">To</span>
+                  <select
+                    value={to}
+                    onChange={(e) => setTo(e.target.value)}
+                    className="bg-transparent cursor-pointer font-semibold outline-none"
+                  >
+                    {CITIES.map(c => (
+                      <option key={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
               </div>
             </div>
 
+            {/* ===== FROM & TO (DESKTOP) ===== */}
+            <div className="hidden md:flex items-center bg-gray-50 border rounded-xl px-4 min-h-[72px] gap-4">
+              <div className="flex-1">
+                <span className="text-xs text-gray-500">From</span>
+                <select
+                  value={from}
+                  onChange={(e) => setFrom(e.target.value)}
+                  className="bg-transparent cursor-pointer font-semibold outline-none w-full"
+                >
+                  {CITIES.map(c => <option key={c}>{c}</option>)}
+                </select>
+              </div>
+
+              <button
+                onClick={swapCities}
+                className="bg-red-500 cursor-pointer text-white w-9 h-9 rounded-full"
+              >
+                ↔
+              </button>
+
+              <div className="flex-1">
+                <span className="text-xs text-gray-500">To</span>
+                <select
+                  value={to}
+                  onChange={(e) => setTo(e.target.value)}
+                  className="bg-transparent cursor-pointer font-semibold outline-none w-full"
+                >
+                  {CITIES.map(c => <option key={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+
+            {/* ===== DATE ===== */}
+            <div className="bg-gray-50 border rounded-xl px-4 py-1">
+              <span className="text-xs text-gray-500">Date of Journey</span>
+              <div className="flex items-center gap-3 mt-1">
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="bg-transparent cursor-pointer font-semibold outline-none w-3/5"
+                />
+
+                <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                  <button
+                    disabled
+                    className="px-4 py-2 rounded-full cursor-not-allowed bg-gray-200 text-gray-500 whitespace-nowrap"
+                  >
+                    Today
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      const t = new Date();
+                      t.setDate(t.getDate() + 1);
+                      setDate(t.toISOString().split("T")[0]);
+                    }}
+                    className="px-4 py-2 rounded-full bg-red-100 text-red-600 whitespace-nowrap"
+                  >
+                    Tomorrow
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* ===== WOMEN BOOKING ===== */}
+            <div className="flex items-center justify-between bg-gray-50 border rounded-xl px-4 py-3">
+              <div className="flex items-center gap-3">
+                <img src={womenImg} className="w-9 h-9" />
+                <div>
+                  <p className="text-sm font-semibold">Booking for women</p>
+                  <button
+                    onClick={() => setShowWomenModal(true)}
+                    className="text-xs text-blue-600 underline"
+                  >
+                    Know more
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onClick={toggleWomen}
+                className={`w-11 h-6 rounded-full relative ${
+                  womenOnly ? "bg-red-600" : "bg-gray-300"
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition ${
+                    womenOnly ? "right-0.5" : "left-0.5"
+                  }`}
+                />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* SEARCH BUTTON (OUTSIDE CARD) */}
-        <div className="w-[300px] mx-auto mt-2" >
+        {/* ===== SEARCH BUTTON ===== */}
+        <div className="max-w-xs mx-auto mt-4">
           <button
             onClick={searchBuses}
-            className="w-full bg-red-600 text-white py-4 rounded-full text-lg font-semibold"
+            className="w-full bg-red-600 text-white py-4 rounded-full text-lg font-semibold flex items-center justify-center gap-2"
           >
+            <Search size={20} />
             Search buses
           </button>
         </div>
       </div>
 
-      {/* TOAST */}
+      {/* ===== TOAST ===== */}
       {toast && (
-        <div className="z-50 fixed bottom-10 md:left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-2 rounded-full animate-bounce">
+        <div className="z-50 fixed bottom-24 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-2 rounded-full animate-bounce">
           {toast}
         </div>
       )}
@@ -212,7 +264,6 @@ export default function HeroSearch() {
           onClose={() => setShowWomenModal(false)}
         />
       )}
-
     </div>
   );
 }

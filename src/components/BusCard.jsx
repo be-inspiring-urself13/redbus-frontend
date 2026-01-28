@@ -49,7 +49,7 @@ export default function BusCard({ bus, travelDate }) {
 
       {/* RIGHT ACTION */}
       <div className="text-right">
-        <p className="text-xl font-bold text-red-600">
+        <p className="text-xl font-bold text-green-700">
           ₹{bus.price}
         </p>
 

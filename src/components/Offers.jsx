@@ -23,7 +23,7 @@ export default function Offers() {
   };
 
   return (
-    <section className="max-w-6xl w-full overflow-visible mx-auto px-4 mt-96 md:mt-28">
+    <section className="max-w-6xl w-full overflow-visible mx-auto px-4 mt-96 md:mt-24">
       {/* TITLE */}
       <h2 className="text-xl font-semibold mb-4">Offers for you</h2>
 
