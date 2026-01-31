@@ -25,10 +25,10 @@ export default function HeroSearch() {
 
   // ✅ today default date
   const today = new Date().toISOString().split("T")[0];
-
   const [from, setFrom] = useState("Chennai");
   const [to, setTo] = useState("Ahmedabad");
   const [date, setDate] = useState(today);
+  const [selectedDay, setSelectedDay] = useState("today");
   const [womenOnly, setWomenOnly] = useState(false);
   const [toast, setToast] = useState("");
   const [showWomenModal, setShowWomenModal] = useState(false);
@@ -63,6 +63,18 @@ export default function HeroSearch() {
     setFrom(to);
     setTo(from);
   };
+
+  const handleToday = () => {
+    setDate(today);
+    setSelectedDay("today");
+  };
+
+ const handleTomorrow = () => {
+  const t = new Date();
+  t.setDate(t.getDate() + 1);
+  setSelectedDay("tomorrow");
+  setDate(t.toISOString().split("T")[0]);
+};
 
   const searchBuses = () => {
     navigate(`/buses?from=${from}&to=${to}&date=${date}`, {
@@ -188,19 +200,24 @@ export default function HeroSearch() {
 
                 <div className="flex gap-2 overflow-x-auto scrollbar-hide">
                   <button
-                    disabled
-                    className="px-4 py-2 rounded-full cursor-not-allowed bg-gray-200 text-gray-500 whitespace-nowrap"
+                    onClick={handleToday}
+                    disabled={selectedDay === "today"}
+                    className={`px-4 py-2 rounded-full whitespace-nowrap
+                      ${selectedDay === "today"
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-red-100 text-red-600"}`}
                   >
                     Today
                   </button>
 
+                  {/* TOMORROW */}
                   <button
-                    onClick={() => {
-                      const t = new Date();
-                      t.setDate(t.getDate() + 1);
-                      setDate(t.toISOString().split("T")[0]);
-                    }}
-                    className="px-4 py-2 rounded-full bg-red-100 text-red-600 whitespace-nowrap"
+                    onClick={handleTomorrow}
+                    disabled={selectedDay === "tomorrow"}
+                    className={`px-4 py-2 rounded-full whitespace-nowrap
+                      ${selectedDay === "tomorrow"
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-red-100 text-red-600"}`}
                   >
                     Tomorrow
                   </button>
@@ -225,14 +242,12 @@ export default function HeroSearch() {
 
               <button
                 onClick={toggleWomen}
-                className={`w-11 h-6 rounded-full relative ${
-                  womenOnly ? "bg-red-600" : "bg-gray-300"
-                }`}
+                className={`w-11 h-6 rounded-full relative ${womenOnly ? "bg-red-600" : "bg-gray-300"
+                  }`}
               >
                 <span
-                  className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition ${
-                    womenOnly ? "right-0.5" : "left-0.5"
-                  }`}
+                  className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition ${womenOnly ? "right-0.5" : "left-0.5"
+                    }`}
                 />
               </button>
             </div>

@@ -17,14 +17,14 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
 
-  useEffect(() => {
-  toast(
-    "Please enter a valid email. Once you pay for bus booking, we will send the confirmation message to this email address.",
-    {
-      icon: "📧",
-    }
-  );
-},[]);
+//   useEffect(() => {
+//   toast(
+//     "Please enter a valid email. Once you pay for bus booking, we will send the confirmation message to this email address.",
+//     {
+//       icon: "📧",
+//     }
+//   );
+// },[]);
 
   const handleLogin = async () => {
   if (!email || !password) {
@@ -99,9 +99,10 @@ export default function Login() {
 
           {/* REMEMBER + FORGOT */}
           <div className="flex justify-between items-center text-sm mb-6">
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2">
               <input
                 type="checkbox"
+                className="cursor-pointer"
                 checked={remember}
                 onChange={() => setRemember(!remember)}
               />
@@ -115,7 +116,7 @@ export default function Login() {
           {/* LOGIN BUTTON */}
           <button
             onClick={handleLogin}
-            className="w-full bg-white text-black py-3 rounded-lg font-semibold hover:bg-opacity-90 transition"
+            className="w-full bg-white text-black py-3 rounded-lg font-semibold hover:bg-opacity-90 transition  hover:bg-green-600 hover:text-white"
           >
             Login
           </button>

@@ -143,7 +143,7 @@ export default function Signup() {
           {/* Button */}
           <button
             onClick={handleSignup}
-            className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-gray-200 transition"
+            className="w-full bg-white text-black py-3 rounded-xl font-semibold hover:bg-green-600 hover:text-white transition"
           >
             Create Account
           </button>
