@@ -195,7 +195,7 @@ export default function HeroSearch() {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="bg-transparent cursor-pointer font-semibold outline-none w-3/5"
+                  className="bg-transparent cursor-pointer font-semibold outline-none w-3/5" 
                 />
 
                 <div className="flex gap-2 overflow-x-auto scrollbar-hide">
@@ -239,7 +239,6 @@ export default function HeroSearch() {
                   </button>
                 </div>
               </div>
-
               <button
                 onClick={toggleWomen}
                 className={`w-11 h-6 rounded-full relative ${womenOnly ? "bg-red-600" : "bg-gray-300"
