@@ -28,7 +28,7 @@ export default function Payment() {
       const { data: order } = await createOrder(totalAmount);
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY,
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: order.amount, // paise (backend already converted)
         currency: "INR",
         name: "RedBus Clone",
