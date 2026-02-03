@@ -1,5 +1,5 @@
 //frontend/src/pages/Payment.jsx
-import { redirect, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { createOrder, verifyPayment } from "../api/payment.Api";
 import { useAuth } from "../context/AuthContext";
@@ -25,8 +25,7 @@ export default function Payment() {
   const handlePayment = async () => {
     try {
 
-      // 🔧 MOBILE DETECTION (IMPORTANT)
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      console.log("Razorpay key:", import.meta.env.VITE_RAZORPAY_KEY_ID);
 
       // 🔥 SEND RUPEES ONLY
       const { data: order } = await createOrder(totalAmount);
@@ -39,9 +38,6 @@ export default function Payment() {
         description: "Bus Ticket Booking",
         order_id: order.id,
 
-        // MOBILE FIX
-        redirect: isMobile,
-
         handler: async (response) => {
 
           setLoading(true); // Show loader
@@ -49,7 +45,7 @@ export default function Payment() {
           try {
             await verifyPayment(response);
 
-            const bookingRes = await api.post("/bookings", {
+             await api.post("/bookings", {
               busId,
               seats: selected,
               travelDate,
@@ -69,17 +65,7 @@ export default function Payment() {
             console.error("BOOKING FAILED 👉", err.response?.data);
             alert("Booking failed. Please try again.");
           }
-        },
-
-        modal: {
-          ondismiss: () => {
-            alert("payment cancelled");
-          },
-        },
-        
-        theme: {
-          color: "#d84e55",
-        },
+        }
       };
 
       new window.Razorpay(options).open();
