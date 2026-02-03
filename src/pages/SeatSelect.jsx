@@ -100,24 +100,25 @@ export default function SeatSelect() {
 
   /* ================= LOGIC ================= */
 
-  // Normal rows only (A1–A10, B1–B10)
-  const normalA = bus.seats.filter(
-    s => s.side === "A" && Number(s.seatNumber.slice(1)) <= 10
-  );
+  // NORMAL ROWS (1–10)
+  const normalB = bus.seats
+    .filter(s => s.side === "B" && Number(s.seatNumber.slice(1)) <= 10)
+    .sort((a, b) => Number(b.seatNumber.slice(1)) - Number(a.seatNumber.slice(1)));
 
-  const normalB = bus.seats.filter(
-    s => s.side === "B" && Number(s.seatNumber.slice(1)) <= 10
-  );
+  const normalA = bus.seats
+    .filter(s => s.side === "A" && Number(s.seatNumber.slice(1)) <= 10)
+    .sort((a, b) => Number(b.seatNumber.slice(1)) - Number(a.seatNumber.slice(1)));
 
-  // LAST ROW – merged (NO AISLE)
-  const lastRow = bus.seats.filter(s =>
-    ["A11", "A12", "A13", "B11", "B12"].includes(s.seatNumber)
-  );
+  // LAST ROW (MERGED – EXACT ORDER)
+  const lastRow = ["B11", "B12", "B13", "A11", "A12"]
+    .map(num => bus.seats.find(s => s.seatNumber === num))
+    .filter(Boolean);
 
 
   return (
     <div className="min-h-screen bg-cover bg-center pt-10 pb-5" style={{ backgroundImage: `url(${bg})` }}>
       <div className="max-w-xl mx-auto bg-white rounded-xl p-4 sm:p-6 shadow overflow-x-auto">
+
         {/* HEADER */}
         <h1 className="text-base sm:text-lg md:text-xl font-bold text-center mb-2">
           Click on available seats to reserve your seat
@@ -126,65 +127,54 @@ export default function SeatSelect() {
           {bus.name} • {travelDate}
         </p>
 
-        {/* DRIVER */}
         <div className="border-2 border-red-600 rounded-3xl p-3">
-          {/* DRIVER (Responsive & aligned to right near seats) */}
-          <div className="flex justify-start mt-4 sm:mt-5 ml-4 sm:ml-12 md:ml-16 mb-6">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-gray-100">
-              <SteeringIcon className="w-5 h-5 text-gray-700" />
-              <span className="text-sm font-semibold text-gray-700">Driver</span>
-            </div>
-          </div>
-
-          {/* Driver divider line */}
-          <div className="mb-6 flex items-center justify-center">
-            <div className="w-3/4 border-t border-dashed border-red-600 opacity-60"></div>
-          </div>
 
           {/* SEATS */}
           <div className="space-y-4">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8">
 
-                {/* A SIDE */}
-                {[normalA[i * 2], normalA[i * 2 + 1]].map(seat => (
-                  <div
-                    key={seat.seatNumber}
-                    className="flex flex-col items-center"
-                    onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}
-                  >
-                    <SeatIcon
-                      className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rotate-180 cursor-pointer 
-                        ${seat.isBooked
-                          ? "text-red-500"
-                          : selected.includes(seat.seatNumber)
-                            ? "text-green-600"
-                            : "text-gray-400 hover:text-gray-600"
-                        }`}
-                    />
+            {/* LAST ROW – NO AISLE */}
+            <div className="flex justify-center gap-6 mt-4">
+              {lastRow.map(seat => (
+                <div key={seat.seatNumber} className="flex flex-col items-center"
+                  onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}>
+                  <SeatIcon className={`w-8 h-8
+                  ${seat.isBooked ? "text-red-500"
+                      : selected.includes(seat.seatNumber)
+                        ? "text-green-600"
+                        : "text-gray-400 hover:text-gray-600"}`} />
+                  <span className="text-xs">{seat.seatNumber}</span>
+                </div>
+              ))}
+            </div>
+
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex justify-center items-center gap-6">
+
+                {/* LEFT – B SIDE */}
+                {[normalB[i * 2 + 1], normalB[i * 2]].map(seat => (
+                  <div key={seat.seatNumber} className="flex flex-col items-center"
+                    onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}>
+                    <SeatIcon className={`w-8 h-8
+                      ${seat.isBooked ? "text-red-500"
+                        : selected.includes(seat.seatNumber)
+                          ? "text-green-600"
+                          : "text-gray-400 hover:text-gray-600"}`} />
                     <span className="text-xs">{seat.seatNumber}</span>
                   </div>
                 ))}
 
                 {/* AISLE */}
-                <div className="w-4 sm:w-6 md:w-8" />
+                <div className="w-8" />
 
-                {/* B SIDE */}
-                {[normalB[i * 2], normalB[i * 2 + 1]].map(seat => (
-                  <div
-                    key={seat.seatNumber}
-                    className="flex flex-col items-center"
-                    onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}
-                  >
-                    <SeatIcon
-                      className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rotate-180 cursor-pointer
-                        ${seat.isBooked
-                          ? "text-red-500"
-                          : selected.includes(seat.seatNumber)
-                            ? "text-green-600"
-                            : "text-gray-400 hover:text-gray-600"
-                        }`}
-                    />
+                {/* RIGHT – A SIDE */}
+                {[normalA[i * 2 + 1], normalA[i * 2]].map(seat => (
+                  <div key={seat.seatNumber} className="flex flex-col items-center"
+                    onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}>
+                    <SeatIcon className={`w-8 h-8
+                      ${seat.isBooked ? "text-red-500"
+                        : selected.includes(seat.seatNumber)
+                          ? "text-green-600"
+                          : "text-gray-400 hover:text-gray-600"}`} />
                     <span className="text-xs">{seat.seatNumber}</span>
                   </div>
                 ))}
@@ -192,26 +182,17 @@ export default function SeatSelect() {
             ))}
           </div>
 
-          {/* 🔥 LAST ROW – MERGED – NO AISLE */}
-          <div className="flex justify-center flex-wrap gap-4 sm:gap-6 md:gap-8 mt-4">
-            {lastRow.map(seat => (
-              <div
-                key={seat.seatNumber}
-                className="flex flex-col items-center"
-                onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}
-              >
-                <SeatIcon
-                  className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rotate-180 cursor-pointer
-                    ${seat.isBooked
-                      ? "text-red-500"
-                      : selected.includes(seat.seatNumber)
-                        ? "text-green-600"
-                        : "text-gray-400 hover:text-gray-600"
-                    }`}
-                />
-                <span className="text-xs">{seat.seatNumber}</span>
-              </div>
-            ))}
+          <div className="mb-6 mt-5 flex justify-center">
+            <div className="w-3/4 border-t border-dashed border-red-600 opacity-60" />
+          </div>
+
+
+          {/* DRIVER – BOTTOM RIGHT */}
+          <div className="flex justify-end mb-4">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full border bg-gray-100 mr-10 sm:mr-16 md:mr-24">
+              <SteeringIcon className="w-5 h-5 rotate-180 text-gray-700" />
+              <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">Driver</span>
+            </div>
           </div>
         </div>
 
@@ -231,7 +212,6 @@ export default function SeatSelect() {
           </div>
         </div>
 
-
         {/* SUMMARY */}
         <div className="mt-8 text-center">
           <p>Selected Seats: <b>{selected.join(", ") || "None"}</b></p>
@@ -243,9 +223,8 @@ export default function SeatSelect() {
             onClick={() => {
               if (selected.length === 0) {
                 toast.error("User must select at least one seat");
-                return; // ❌ STOP here
+                return;
               }
-
               navigate("/payment", {
                 state: {
                   busId: bus._id,
@@ -262,6 +241,6 @@ export default function SeatSelect() {
           </button>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
