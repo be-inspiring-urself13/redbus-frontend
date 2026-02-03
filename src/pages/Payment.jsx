@@ -1,5 +1,5 @@
 //frontend/src/pages/Payment.jsx
-import { useLocation, useNavigate } from "react-router-dom";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { createOrder, verifyPayment } from "../api/payment.Api";
 import { useAuth } from "../context/AuthContext";
@@ -37,6 +37,8 @@ export default function Payment() {
         name: "RedBus Clone",
         description: "Bus Ticket Booking",
         order_id: order.id,
+
+        redirect: true,
 
         handler: async (response) => {
 
