@@ -36,6 +36,18 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+
+    // ❌ CLEAR PASSENGER AUTO-FILL (PERMANENT)
+    localStorage.removeItem("passengerInfo");
+    localStorage.removeItem("contactInfo");
+
+    // ❌ CLEAR TEMP BOOKING DATA
+    localStorage.removeItem("passengerInfo_temp");
+    localStorage.removeItem("contactInfo_temp");
+
+    // ❌ CLEAR EMAIL USED FOR LOGIN VALIDATION
+    localStorage.removeItem("passengerEmail");
+
     setUser(null);
   };
 

@@ -1,4 +1,3 @@
-//frontend/src/pages/Payment.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { createOrder, verifyPayment } from "../api/payment.Api";

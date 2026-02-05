@@ -1,4 +1,3 @@
-//frontend/src/pages/Signup.jsx
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";

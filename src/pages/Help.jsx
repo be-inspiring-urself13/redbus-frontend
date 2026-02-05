@@ -1,4 +1,4 @@
-//frontend/src/pages/Help.jsx
+
 import helpBg from "../assets/bg.jpeg";          // background image
 import supportImg from "../assets/Help.jpg";     // 24/7 support image
 import tripImg from "../assets/dog.svg";        // dog / trip image

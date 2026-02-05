@@ -1,4 +1,4 @@
-//frontend/src/pages/Home.jsx
+
 import HeroSearch from "../components/HeroSearch";
 import Offers from "../components/Offers";
 import PosterStrip from "../components/PosterStrip";
