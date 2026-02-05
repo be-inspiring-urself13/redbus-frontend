@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/axios";
-import { useAuth } from "../context/AuthContext";
 import bg from "../assets/bg.jpeg";
 
 // ===== SVGs =====
@@ -17,33 +16,6 @@ const SeatIcon = ({ className }) => (
     <path d="M18.5 10V8c0-2.8 0-4.2-.9-5.1C16.7 2 15.3 2 12.5 2h-1c-2.8 0-4.2 0-5.1.9C5.5 3.8 5.5 5.2 5.5 8v2" />
   </svg>
 );
-
-// const SeatIcon = ({ className }) => (
-//   <svg
-//     viewBox="0 0 64 64"
-//     fill="none"
-//     stroke="currentColor"
-//     strokeWidth="2"
-//     strokeLinecap="round"
-//     strokeLinejoin="round"
-//     className={className}
-//   >
-//     {/* Backrest */}
-//     <rect x="18" y="6" width="28" height="28" rx="6" />
-
-//     {/* Seat base */}
-//     <rect x="14" y="34" width="36" height="14" rx="4" />
-
-//     {/* Left arm */}
-//     <rect x="8" y="22" width="6" height="20" rx="3" />
-
-//     {/* Right arm */}
-//     <rect x="50" y="22" width="6" height="20" rx="3" />
-
-//     {/* Bottom stand */}
-//     <rect x="22" y="50" width="20" height="6" rx="3" />
-//   </svg>
-// );
 
 
 const SteeringIcon = ({ className }) => (
@@ -59,7 +31,6 @@ export default function SeatSelect() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { user } = useAuth();
 
   const travelDate = state?.travelDate;
   const [bus, setBus] = useState(null);
@@ -84,7 +55,6 @@ export default function SeatSelect() {
 
   const toggleSeat = (seatNo, booked) => {
     if (booked) return;
-    if (!user) return toast.error("Login required");
 
     setSelected(prev =>
       prev.includes(seatNo)
@@ -133,11 +103,11 @@ export default function SeatSelect() {
           <div className="space-y-4">
 
             {/* LAST ROW – NO AISLE */}
-            <div className="flex justify-center gap-6 mt-4">
+            <div className="flex justify-center gap-4 mt-4 sm:gap-6 md:gap-8">
               {lastRow.map(seat => (
                 <div key={seat.seatNumber} className="flex flex-col items-center"
                   onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}>
-                  <SeatIcon className={`w-8 h-8
+                  <SeatIcon className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10
                   ${seat.isBooked ? "text-red-500"
                       : selected.includes(seat.seatNumber)
                         ? "text-green-600"
@@ -148,13 +118,13 @@ export default function SeatSelect() {
             </div>
 
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex justify-center items-center gap-6">
+              <div key={i} className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8">
 
                 {/* LEFT – B SIDE */}
                 {[normalB[i * 2 + 1], normalB[i * 2]].map(seat => (
                   <div key={seat.seatNumber} className="flex flex-col items-center"
                     onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}>
-                    <SeatIcon className={`w-8 h-8
+                    <SeatIcon className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 
                       ${seat.isBooked ? "text-red-500"
                         : selected.includes(seat.seatNumber)
                           ? "text-green-600"
@@ -164,13 +134,13 @@ export default function SeatSelect() {
                 ))}
 
                 {/* AISLE */}
-                <div className="w-8" />
+                <div className="w-8 " />
 
                 {/* RIGHT – A SIDE */}
                 {[normalA[i * 2 + 1], normalA[i * 2]].map(seat => (
                   <div key={seat.seatNumber} className="flex flex-col items-center"
                     onClick={() => toggleSeat(seat.seatNumber, seat.isBooked)}>
-                    <SeatIcon className={`w-8 h-8
+                    <SeatIcon className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10
                       ${seat.isBooked ? "text-red-500"
                         : selected.includes(seat.seatNumber)
                           ? "text-green-600"
@@ -222,10 +192,10 @@ export default function SeatSelect() {
           <button
             onClick={() => {
               if (selected.length === 0) {
-                toast.error("User must select at least one seat");
+                toast.error("Select at least one seat");
                 return;
               }
-              navigate("/payment", {
+              navigate("/passenger-info", {
                 state: {
                   busId: bus._id,
                   busName: bus.name,
@@ -237,7 +207,7 @@ export default function SeatSelect() {
             }}
             className="mt-4 bg-red-600 hover:bg-green-700 text-white px-6 py-2 rounded"
           >
-            Proceed to Payment
+            Continue
           </button>
         </div>
       </div>

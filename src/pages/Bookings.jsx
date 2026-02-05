@@ -75,11 +75,10 @@ export default function Bookings() {
               key={booking._id}
               className="border rounded-xl p-4 shadow-sm bg-white"
             >
-
               <h2 className="font-semibold text-lg text-red-600">
-                {booking.bus
+                {booking.bus?.from && booking.bus?.to
                   ? `${booking.bus.from} → ${booking.bus.to}`
-                  : "Route unavailable"}
+                  : `${booking.from} → ${booking.to}`}
               </h2>
 
               <p className="text-sm mt-1">
@@ -112,3 +111,4 @@ export default function Bookings() {
     </div>
   );
 }
+

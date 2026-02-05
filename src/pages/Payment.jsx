@@ -1,8 +1,7 @@
 //frontend/src/pages/Payment.jsx
-import { redirect, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { createOrder, verifyPayment } from "../api/payment.Api";
-import { useAuth } from "../context/AuthContext";
 import Loader from "../components/Loader";
 import { useState } from "react";
 import bg from "../assets/bg.jpeg";
@@ -12,7 +11,6 @@ import payImg from "../assets/paynow.jpg";
 export default function Payment() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
 
   // SAFETY
@@ -20,7 +18,7 @@ export default function Payment() {
     return <p>Invalid payment data</p>;
   }
 
-  const { busId, busName, travelDate, selected, totalAmount } = state;
+  const { busId, busName, travelDate, selected, passenger, contact, totalAmount, from, to } = state;
 
   const handlePayment = async () => {
     try {
@@ -47,20 +45,36 @@ export default function Payment() {
           try {
             await verifyPayment(response);
 
-             await api.post("/bookings", {
+            const passengers = selected.map(seatNo => ({
+              seatNumber: seatNo,
+              name: passenger.name
+            }));
+
+            const res = await api.post("/bookings", {
               busId,
               seats: selected,
               travelDate,
+              contact,
+              passengers,
               totalAmount,
+              from,
+              to,
               paymentId: response.razorpay_payment_id,
             });
+
+            // store booking id for login linking
+            localStorage.setItem("guestBookingId", res.data.bookingId);
 
             navigate("/booking-success", {
               state: {
                 busName,
                 travelDate,
                 seats: selected,
+                passengers,
+                contact,
                 totalAmount,
+                from,
+                to
               },
             });
           } catch (err) {
@@ -110,9 +124,11 @@ export default function Payment() {
         {/* DETAILS */}
         <div className="text-left space-y-2 text-">
           <p><b>Bus:</b> {busName}</p>
-          <p><b>Passenger:</b> {user?.name}</p>
-          <p><b>Date:</b> {travelDate}</p>
+          <p><b>Passenger:</b> {passenger.name} </p>
+          <p><b>Contact:</b> {contact.phone}</p>
           <p><b>Seats:</b> {selected.join(", ")}</p>
+          <p><b>Date:</b> {travelDate}</p>
+
 
           <div className="mt-4 text-lg font-bold text-center text-green-600">
             Total: ₹{totalAmount}

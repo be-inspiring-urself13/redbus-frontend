@@ -6,11 +6,13 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import BusList from "./pages/BusList";
 import SeatSelect from "./pages/SeatSelect";
+import PassengerInfo from "./pages/PassengerInfo";
 import Payment from "./pages/Payment";
 import BookingSuccess from "./pages/BookingSuccess";
 import Navbar from "./components/Navbar";
 import Bookings from "./pages/Bookings";
 import Help from "./pages/Help";
+
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
             <Route path="/help" element={<Help />} />
             <Route path="/buses" element={<BusList />} />
             <Route path="/seats/:id" element={<SeatSelect />} />
+            <Route path="/passenger-info" element={<PassengerInfo />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/booking-success" element={<BookingSuccess />} />
             <Route path="/bookings" element={<Bookings />}></Route>
